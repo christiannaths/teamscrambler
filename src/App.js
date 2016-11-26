@@ -1,21 +1,25 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import Team from './components/team'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+const samplePlayers = [
+  { name: 'Mark' },
+  { name: 'Ben' },
+  { name: 'Greg' },
+  { name: 'Dana' },
+  { name: 'Christian' },
+  { name: 'Nathan' },
+]
+
+const sampleTeams = {
+  team1: samplePlayers.slice(0, 3),
+  team2: samplePlayers.slice(3),
 }
+
+const App = () => (
+  <div className="game">
+    <Team name='all-stars' players={sampleTeams.team1} />
+    <Team name='renegades' players={sampleTeams.team2} />
+  </div>
+)
 
 export default App;
