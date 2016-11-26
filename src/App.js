@@ -1,25 +1,37 @@
 import React from 'react'
 import Team from './components/team'
 
-const samplePlayers = [
-  { name: 'Mark' },
-  { name: 'Ben' },
-  { name: 'Greg' },
-  { name: 'Dana' },
-  { name: 'Christian' },
-  { name: 'Nathan' },
-]
+class App extends React.Component {
+  constructor(props){
+    super(props)
 
-const sampleTeams = {
-  team1: samplePlayers.slice(0, 3),
-  team2: samplePlayers.slice(3),
+    this.state = {
+      players: [
+        { name: 'Mark' },
+        { name: 'Ben' },
+        { name: 'Greg' },
+        { name: 'Dana' },
+        { name: 'Christian' },
+        { name: 'Nathan' },
+      ]
+    }
+  }
+
+  render(){
+    const { players } = this.state
+    const team1 = players.slice(0, 3)
+    const team2 = players.slice(3)
+
+    return (
+      <div className="app">
+        <div className="game">
+          <Team name='all-stars' players={team1} />
+          <Team name='renegades' players={team2} />
+        </div>
+        <button>Shuffle!</button>
+      </div>
+    );
+  }
 }
-
-const App = () => (
-  <div className="game">
-    <Team name='all-stars' players={sampleTeams.team1} />
-    <Team name='renegades' players={sampleTeams.team2} />
-  </div>
-)
 
 export default App;
