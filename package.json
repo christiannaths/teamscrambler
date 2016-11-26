@@ -1,6 +1,6 @@
 {
   "name": "supergroups",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "devDependencies": {
     "react-scripts": "0.7.0"
