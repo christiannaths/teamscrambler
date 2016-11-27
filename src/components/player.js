@@ -19,13 +19,13 @@ class Player extends React.Component {
   }
 
   render(){
-    const { player } = this.props
+    const { player, onChange } = this.props
     const { editing } = this.state
 
     return (
       editing
         ? <li>
-            <input defaultValue={player.name} />
+            <input defaultValue={player.name} onChange={(event) => onChange(player.id, event.target.value)} />
             <button onClick={this.handleEditToggle}>Done</button>
           </li>
         : <li className="player" onClick={this.handleEditToggle}>

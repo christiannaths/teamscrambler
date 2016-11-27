@@ -15,19 +15,33 @@ class App extends React.Component {
 
     this.state = {
       players: [
-        { name: 'Mark' },
-        { name: 'Ben' },
-        { name: 'Greg' },
-        { name: 'Dana' },
-        { name: 'Christian' },
-        { name: 'Nathan' },
+        { id: 1, name: 'Mark' },
+        { id: 2, name: 'Ben' },
+        { id: 3, name: 'Greg' },
+        { id: 4, name: 'Dana' },
+        { id: 5, name: 'Christian' },
+        { id: 6, name: 'Nathan' },
       ]
     }
+
+    this.handleShuffle = this.handleShuffle.bind(this)
+    this.handlePlayerChange = this.handlePlayerChange.bind(this)
   }
 
   handleShuffle() {
     this.setState({
       players: shuffle(this.state.players)
+    })
+  }
+
+  handlePlayerChange(id, value) {
+    const { players } = this.state
+    const player = players.find((player) => player.id === id)
+
+    player.name = value
+
+    this.setState({
+      players: players
     })
   }
 
@@ -40,10 +54,10 @@ class App extends React.Component {
     return (
       <div className="app">
         <div className="game">
-          <Team name='all-stars' players={team1} />
-          <Team name='renegades' players={team2} />
+          <Team name='all-stars' players={team1} onPlayerChange={this.handlePlayerChange}/>
+          <Team name='renegades' players={team2} onPlayerChange={this.handlePlayerChange}/>
         </div>
-        <button onClick={this.handleShuffle.bind(this)}>
+        <button onClick={this.handleShuffle}>
           Shuffle!
         </button>
       </div>
