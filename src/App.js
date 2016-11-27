@@ -27,6 +27,7 @@ class App extends React.Component {
     this.handleShuffle = this.handleShuffle.bind(this)
     this.handlePlayerChange = this.handlePlayerChange.bind(this)
     this.handlePlayerAdd = this.handlePlayerAdd.bind(this)
+    this.handlePlayerDelete = this.handlePlayerDelete.bind(this)
   }
 
   handleShuffle() {
@@ -56,6 +57,14 @@ class App extends React.Component {
     })
   }
 
+  handlePlayerDelete(id) {
+    let { players } = this.state
+    players = players.filter((player) => player.id !== id)
+    this.setState({
+      players: players
+    })
+  }
+
   render(){
     const { players } = this.state
     const half = Math.ceil(players.length/2)
@@ -65,8 +74,18 @@ class App extends React.Component {
     return (
       <div className="app">
         <div className="game">
-          <Team name='all-stars' players={team1} onPlayerChange={this.handlePlayerChange}/>
-          <Team name='renegades' players={team2} onPlayerChange={this.handlePlayerChange}/>
+          <Team
+            name='all-stars'
+            players={team1}
+            onPlayerChange={this.handlePlayerChange}
+            onPlayerDelete={this.handlePlayerDelete}
+          />
+          <Team
+            name='renegades'
+            players={team2}
+            onPlayerChange={this.handlePlayerChange}
+            onPlayerDelete={this.handlePlayerDelete}
+          />
         </div>
         <button onClick={this.handleShuffle}>
           Shuffle!
