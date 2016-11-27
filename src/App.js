@@ -26,6 +26,7 @@ class App extends React.Component {
 
     this.handleShuffle = this.handleShuffle.bind(this)
     this.handlePlayerChange = this.handlePlayerChange.bind(this)
+    this.handlePlayerAdd = this.handlePlayerAdd.bind(this)
   }
 
   handleShuffle() {
@@ -39,6 +40,16 @@ class App extends React.Component {
     const player = players.find((player) => player.id === id)
 
     player.name = value
+
+    this.setState({
+      players: players
+    })
+  }
+
+  handlePlayerAdd() {
+    const { players } = this.state
+    const newPlayer = { id: Date.now(), name: 'New Player'}
+    players.push(newPlayer)
 
     this.setState({
       players: players
@@ -59,6 +70,9 @@ class App extends React.Component {
         </div>
         <button onClick={this.handleShuffle}>
           Shuffle!
+        </button>
+        <button onClick={this.handlePlayerAdd}>
+          Add Player
         </button>
       </div>
     );
