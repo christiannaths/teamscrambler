@@ -1,5 +1,6 @@
 import React from 'react';
 import Player from './player'
+import './team.css'
 
 const Team = ({players, name, onPlayerChange, onPlayerDelete}) => {
 
@@ -14,8 +15,8 @@ const Team = ({players, name, onPlayerChange, onPlayerDelete}) => {
 
   return (
     <div className="team">
-      <h1>{name}</h1>
-      <ol>{playerList}</ol>
+      <h1 className="team-title">{name}</h1>
+      <ol className="team-players">{playerList}</ol>
     </div>
   )
 }

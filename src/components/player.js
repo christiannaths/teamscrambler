@@ -1,4 +1,5 @@
 import React from 'react'
+import './player.css'
 
 class Player extends React.Component {
   constructor(props){
@@ -35,10 +36,21 @@ class Player extends React.Component {
 
     return (
       editing
-        ? <li>
-            <input defaultValue={player.name} onChange={(event) => onChange(player.id, event.target.value)} />
-            <button onClick={this.handleEditToggle}>Done</button>
-            <button onClick={this.handleDelete}>⨉</button>
+        ? <li className="player">
+            <input
+              className="player-edit-input"
+              defaultValue={player.name}
+              onChange={(event) => onChange(player.id, event.target.value)}
+              autoFocus={true}
+            />
+            <div className="player-edit-controls">
+              <button className="player-edit-done" onClick={this.handleEditToggle}>
+                <i className="fa fa-check" aria-hidden="true"></i>
+              </button>
+              <button className="player-edit-delete" onClick={this.handleDelete}>
+                <i className="fa fa-trash-o" aria-hidden="true"></i>
+              </button>
+            </div>
           </li>
         : <li className="player" onClick={this.handleEditToggle}>
             {player.name}

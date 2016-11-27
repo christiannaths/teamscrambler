@@ -5,7 +5,7 @@
   outline: 0;
   vertical-align: baseline;
   font-size: 1em;
-  font-weight: normal;
+  font-weight: inherit;
   background: transparent;
   box-sizing: border-box;
 }
