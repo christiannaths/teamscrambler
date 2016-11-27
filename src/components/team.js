@@ -1,10 +1,15 @@
 import React from 'react';
 import Player from './player'
 
-const Team = ({players, name, onPlayerChange}) => {
+const Team = ({players, name, onPlayerChange, onPlayerDelete}) => {
 
   const playerList = players.map((player, i) => (
-    <Player key={i} player={player} onChange={onPlayerChange} />
+    <Player
+      key={i}
+      player={player}
+      onChange={onPlayerChange}
+      onDelete={onPlayerDelete}
+    />
   ))
 
   return (
