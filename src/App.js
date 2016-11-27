@@ -73,6 +73,9 @@ class App extends React.Component {
 
     return (
       <div className="app">
+        <header className="app-header">
+          <h1>Supergroups!</h1>
+        </header>
         <div className="game">
           <Team
             name='all-stars'

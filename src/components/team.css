@@ -1,0 +1,33 @@
+.team {
+  flex: 1;
+}
+
+.team:first-child {
+  text-align: left;
+}
+
+.team:last-child {
+  text-align: right;
+}
+
+.team-title {
+  font-size: 1.125em;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.team-title::before {
+  content: '';
+  width: 0.75em;
+  height: 0.75em;
+  display: inline-block;
+  margin: 0.375em 0.25em;
+  border-radius: 2px;
+  float: left;
+  background-color: #4a90e2;
+}
+
+.team:last-child .team-title::before {
+  float: right;
+  background-color: #d0021b;
+}

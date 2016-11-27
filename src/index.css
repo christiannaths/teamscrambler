@@ -19,6 +19,25 @@ body {
 }
 
 .page {
-  background-color: #dae0e6;
+  background-color: #f2f2f2;
   color: #2a343e;
+}
+
+.app-header {
+  background: #fecb2f;
+  color: #333333;
+  padding: 0.75rem 2rem;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.game {
+  display: flex;
+  margin: 1.5rem auto;
+  width: 24rem;
+  background: white;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  box-shadow: 1px 1px 8px rgba(0,0,0,0.15);
 }
