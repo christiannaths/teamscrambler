@@ -77,25 +77,27 @@ class App extends React.Component {
           <h1>Supergroups!</h1>
         </header>
         <div className="game">
-          <Team
-            name='all-stars'
-            players={team1}
-            onPlayerChange={this.handlePlayerChange}
-            onPlayerDelete={this.handlePlayerDelete}
-          />
-          <Team
-            name='renegades'
-            players={team2}
-            onPlayerChange={this.handlePlayerChange}
-            onPlayerDelete={this.handlePlayerDelete}
-          />
+          <button className="game-add-player" onClick={this.handlePlayerAdd}>
+            Add Player <i className="fa fa-user-plus" aria-hidden="true"></i>
+          </button>
+          <div className="game-teams">
+            <Team
+              name='all-stars'
+              players={team1}
+              onPlayerChange={this.handlePlayerChange}
+              onPlayerDelete={this.handlePlayerDelete}
+            />
+            <Team
+              name='renegades'
+              players={team2}
+              onPlayerChange={this.handlePlayerChange}
+              onPlayerDelete={this.handlePlayerDelete}
+            />
+          </div>
+          <button className="game-shuffle" onClick={this.handleShuffle}>
+            <i className="icon fa fa-random" aria-hidden="true"></i>
+          </button>
         </div>
-        <button onClick={this.handleShuffle}>
-          Shuffle!
-        </button>
-        <button onClick={this.handlePlayerAdd}>
-          Add Player
-        </button>
       </div>
     );
   }
