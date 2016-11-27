@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  vertical-align: baseline;
+  font-size: 1em;
+  font-weight: normal;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
+  font-size: inherit;
+  vertical-align: inherit;
+  background: inherit;
+  box-sizing: inherit;
+}
