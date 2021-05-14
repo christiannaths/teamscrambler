@@ -31,6 +31,9 @@ function Player({ player, onChange, onDelete }) {
         className="player-edit-input"
         type="text"
         defaultValue={player.name}
+        onFocus={({ target }) =>
+          target.setSelectionRange(0, target.value.length)
+        }
         onChange={event => onChange(player.id, event.target.value)}
         autoFocus={true}
       />

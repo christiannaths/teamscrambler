@@ -1,3 +1,8 @@
+:root {
+  --app-color: #fecb2f;
+  --text-color: #38003c;
+}
+
 html {
   min-height: 100%;
   display: flex;
@@ -40,16 +45,22 @@ textarea {
 
 .page {
   background-color: #f2f2f2;
-  color: #2a343e;
+  color: var(--text-color);
 }
 
 .app-header {
-  background: #fecb2f;
+  background: var(--app-color);
   color: #333333;
   padding: 0.75rem 2rem;
-  text-align: center;
   font-size: 1.5em;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+
+.app-header-logo {
+  height: 2rem;
+  display: block;
 }
 
 .game,
@@ -59,6 +70,19 @@ textarea {
   padding: 0.75rem 0.5rem;
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.15);
   position: relative;
+}
+
+@keyframes flash-background {
+  0% {
+    background-color: #ecfe0055;
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+.game.-no-flash {
+  animation: 1s flash-background forwards 0ms;
 }
 
 .options {
@@ -120,7 +144,7 @@ textarea {
   position: fixed;
   font-size: 2em;
   padding: 0.5em;
-  background: #fdca42;
+  background: var(--app-color);
   right: 0.5rem;
   bottom: 0.5rem;
   border-radius: 50%;
@@ -133,4 +157,8 @@ textarea {
   width: 1em;
   height: 1em;
   display: block;
+}
+
+.game-counter {
+  margin-bottom: 0.75rem;
 }
