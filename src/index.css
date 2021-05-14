@@ -10,6 +10,25 @@ body {
   line-height: 1.5;
 }
 
+input[type='color'],
+input[type='date'],
+input[type='datetime'],
+input[type='datetime-local'],
+input[type='email'],
+input[type='month'],
+input[type='number'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='text'],
+input[type='time'],
+input[type='url'],
+input[type='week'],
+select:focus,
+textarea {
+  font-size: 16px;
+}
+
 .page,
 .root {
   display: flex;
@@ -33,30 +52,63 @@ body {
   font-weight: bold;
 }
 
-.game {
+.game,
+.bench {
   margin: 3rem 0;
   background: white;
   padding: 0.75rem 0.5rem;
-  box-shadow: 1px 1px 8px rgba(0,0,0,0.15);
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.15);
   position: relative;
+}
+
+.options {
+  margin: 0 0;
+  padding: 0.75rem 0.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.bench {
+  opacity: 0.8;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .game-teams {
   display: flex;
 }
 
-.game-add-player {
-  position: absolute;
-  top: -1.5em;
-  right: 0.5em;
+.game-teams .team + .team {
+  border-left: 1px solid #ccc;
+}
+
+.team-size-field {
+  display: flex;
+  align-items: center;
+}
+
+.team-size-field input {
+  flex: 0 0 5em;
+  margin-left: 1em;
+}
+
+.team-size-field.-strikethrough {
+  text-decoration: line-through;
+  opacity: 0.5;
 }
 
 @media (min-width: 24em) {
-  .game {
+  .game,
+  .bench {
     margin: 3rem auto;
     padding: 0.75rem 1rem;
     max-width: 22em;
     border-radius: 4px;
+  }
+
+  .options {
+    margin: 0rem auto;
+    max-width: 22em;
   }
 
   .game-add-player {
@@ -73,7 +125,8 @@ body {
   bottom: 2.5rem;
   border-radius: 50%;
   border: 2px solid #333;
-  box-shadow: 1px 3px 10px rgba(0,0,0,0.25) ;
+  box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 }
 
 .game-shuffle .icon {

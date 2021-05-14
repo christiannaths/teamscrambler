@@ -1,106 +1,161 @@
-import React from 'react'
-import Team from './components/team'
+import React from 'react';
+import { useCallback, useMemo } from 'react';
+import { nanoid } from 'nanoid';
+import useStickyState from './useStickyState';
+import Team from './components/Team';
 
 function shuffle(a) {
-  for (let i = a.length; i; i--) {
+  const data = [...a];
+
+  for (let i = data.length; i; i--) {
     let j = Math.floor(Math.random() * i);
-    [a[i - 1], a[j]] = [a[j], a[i - 1]];
+    [data[i - 1], data[j]] = [data[j], data[i - 1]];
   }
-  return a
+  return data;
 }
 
-class App extends React.Component {
-  constructor(props){
-    super(props)
+const DEFAULT_PLAYERS = [
+  { id: nanoid(), name: 'Player 1' },
+  { id: nanoid(), name: 'Player 2' },
+  { id: nanoid(), name: 'Player 3' },
+  { id: nanoid(), name: 'Player 4' },
+  { id: nanoid(), name: 'Player 5' },
+  { id: nanoid(), name: 'Player 6' },
+  { id: nanoid(), name: 'Player 7' },
+  { id: nanoid(), name: 'Player 8' },
+];
 
-    this.state = {
-      players: [
-        { id: 1, name: 'Mark' },
-        { id: 2, name: 'Ben' },
-        { id: 3, name: 'Greg' },
-        { id: 4, name: 'Dana' },
-        { id: 5, name: 'Christian' },
-        { id: 6, name: 'Nathan' },
-      ]
-    }
+const DEFAULT_TEAM_SIZE = 3;
 
-    this.handleShuffle = this.handleShuffle.bind(this)
-    this.handlePlayerChange = this.handlePlayerChange.bind(this)
-    this.handlePlayerAdd = this.handlePlayerAdd.bind(this)
-    this.handlePlayerDelete = this.handlePlayerDelete.bind(this)
-  }
+function App() {
+  const [players, setPlayers] = useStickyState(
+    DEFAULT_PLAYERS,
+    'players',
+  );
+  const [teamSize, setTeamSize] = useStickyState(
+    DEFAULT_TEAM_SIZE,
+    'teamSize',
+  );
 
-  handleShuffle() {
-    this.setState({
-      players: shuffle(this.state.players)
-    })
-  }
+  const handlePlayerAdd = useCallback(
+    function () {
+      const newPlayer = { id: nanoid(), name: 'New Player' };
+      setPlayers(state => [...state, newPlayer]);
+    },
+    [setPlayers],
+  );
 
-  handlePlayerChange(id, value) {
-    const { players } = this.state
-    const player = players.find((player) => player.id === id)
+  const handlePlayerChange = useCallback(
+    function (id, value) {
+      const player = players.find(p => p.id === id);
+      player.name = value;
 
-    player.name = value
+      setPlayers(players);
+    },
+    [players, setPlayers],
+  );
 
-    this.setState({
-      players: players
-    })
-  }
+  const handlePlayerDelete = useCallback(
+    function (id) {
+      const newState = players.filter(player => player.id !== id);
+      setPlayers(newState);
+    },
+    [players, setPlayers],
+  );
 
-  handlePlayerAdd() {
-    const { players } = this.state
-    const newPlayer = { id: Date.now(), name: 'New Player'}
-    players.push(newPlayer)
+  const handlePlayersShuffle = useCallback(
+    function () {
+      setPlayers(state => shuffle(state));
+    },
+    [setPlayers],
+  );
 
-    this.setState({
-      players: players
-    })
-  }
+  const handleTeamSizeChange = useCallback(
+    function (event) {
+      const value = event.target.value || 0;
+      setTeamSize(Number.parseInt(value, 10));
+    },
+    [setTeamSize],
+  );
 
-  handlePlayerDelete(id) {
-    let { players } = this.state
-    players = players.filter((player) => player.id !== id)
-    this.setState({
-      players: players
-    })
-  }
+  const [team1, team2, bench] = useMemo(
+    function () {
+      if (!teamSize) {
+        const half = Math.ceil(players.length / 2);
+        return [players.slice(0, half), players.slice(half), []];
+      }
 
-  render(){
-    const { players } = this.state
-    const half = Math.ceil(players.length/2)
-    const team1 = players.slice(0, half)
-    const team2 = players.slice(half)
+      return [
+        players.slice(0, teamSize),
+        players.slice(teamSize, teamSize + teamSize),
+        players.slice(teamSize + teamSize),
+      ];
+    },
+    [players, teamSize],
+  );
 
-    return (
-      <div className="app">
-        <header className="app-header">
-          <h1>Supergroups!</h1>
-        </header>
-        <div className="game">
-          <button className="game-add-player" onClick={this.handlePlayerAdd}>
-            Add Player <i className="fa fa-user-plus" aria-hidden="true"></i>
-          </button>
-          <div className="game-teams">
-            <Team
-              name='all-stars'
-              players={team1}
-              onPlayerChange={this.handlePlayerChange}
-              onPlayerDelete={this.handlePlayerDelete}
-            />
-            <Team
-              name='renegades'
-              players={team2}
-              onPlayerChange={this.handlePlayerChange}
-              onPlayerDelete={this.handlePlayerDelete}
-            />
-          </div>
-          <button className="game-shuffle" onClick={this.handleShuffle}>
-            <i className="icon fa fa-random" aria-hidden="true"></i>
-          </button>
+  return (
+    <div className="app">
+      <header className="app-header">
+        <h1>Supergroups!</h1>
+      </header>
+
+      <section className="options">
+        <label
+          className={`team-size-field ${
+            teamSize ? '' : '-strikethrough'
+          }`}
+        >
+          Team Size:
+          <input
+            type="tel"
+            className="player-edit-input"
+            value={teamSize}
+            onChange={handleTeamSizeChange}
+            autoFocus={false}
+          />
+        </label>
+
+        <button
+          className="options-add-player"
+          onClick={handlePlayerAdd}
+        >
+          Add&nbsp;Player{' '}
+          <i className="fa fa-user-plus" aria-hidden="true"></i>
+        </button>
+      </section>
+
+      <section className="game">
+        <div className="game-teams">
+          <Team
+            name="Team 1"
+            players={team1}
+            onPlayerChange={handlePlayerChange}
+            onPlayerDelete={handlePlayerDelete}
+          />
+          <Team
+            name="Team 2"
+            players={team2}
+            onPlayerChange={handlePlayerChange}
+            onPlayerDelete={handlePlayerDelete}
+          />
         </div>
-      </div>
-    );
-  }
+      </section>
+
+      <section className="bench">
+        <Team
+          name="Bench"
+          players={bench}
+          onPlayerChange={handlePlayerChange}
+          onPlayerDelete={handlePlayerDelete}
+        />
+      </section>
+
+      <button className="game-shuffle" onClick={handlePlayersShuffle}>
+        <i className="icon fa fa-random" aria-hidden="true"></i>
+      </button>
+    </div>
+  );
 }
 
 export default App;

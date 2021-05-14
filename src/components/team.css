@@ -2,12 +2,13 @@
   flex: 1;
 }
 
-.team:first-child {
-  text-align: left;
-}
-
 .team:last-child {
   text-align: right;
+}
+
+.team:first-child,
+.team:only-child {
+  text-align: left;
 }
 
 .team-title {
@@ -30,4 +31,9 @@
 .team:last-child .team-title::before {
   float: right;
   background-color: #d0021b;
+}
+
+.team:only-child .team-title::before {
+  float: left;
+  background-color: #ccc;
 }

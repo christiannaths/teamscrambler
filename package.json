@@ -3,11 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "devDependencies": {
-    "react-scripts": "0.7.0"
+    "@prettier/plugin-xml": "^0.13.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react-app": "^6.2.2",
+    "prettier": "^2.3.0",
+    "react-scripts": "^4.0.3"
   },
   "dependencies": {
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1"
+    "nanoid": "^3.1.23",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -18,5 +26,17 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
   "main": "index.js",
   "author": "Christian Naths/ExchangeJS",
-  "license": "SEE LICENSE IN 'LICENSE.md'"
+  "license": "SEE LICENSE IN 'LICENSE.md'",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

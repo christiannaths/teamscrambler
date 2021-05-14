@@ -1,34 +1,34 @@
 import React from 'react';
-import Player from './player'
-import './team.css'
+import PropTypes from 'prop-types';
+import Player from './Player';
+import './team.css';
 
-const Team = ({players, name, onPlayerChange, onPlayerDelete}) => {
-
-  const playerList = players.map((player, i) => (
-    <Player
-      key={i}
-      player={player}
-      onChange={onPlayerChange}
-      onDelete={onPlayerDelete}
-    />
-  ))
-
+function Team({ players, name, onPlayerChange, onPlayerDelete }) {
   return (
     <div className="team">
       <h1 className="team-title">{name}</h1>
-      <ol className="team-players">{playerList}</ol>
+      <ol className="team-players">
+        {players.map((player, i) => (
+          <Player
+            key={i}
+            player={player}
+            onChange={onPlayerChange}
+            onDelete={onPlayerDelete}
+          />
+        ))}
+      </ol>
     </div>
-  )
+  );
 }
 
 Team.propTypes = {
-  players: React.PropTypes.array.isRequired,
-  name: React.PropTypes.string,
-}
+  players: PropTypes.array.isRequired,
+  name: PropTypes.string,
+};
 
 Team.defaultProps = {
   players: [],
-  name: 'The Pylons'
-}
+  name: 'The Pylons',
+};
 
-export default Team
+export default Team;

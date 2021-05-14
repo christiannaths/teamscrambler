@@ -1,0 +1,35 @@
+{
+  "extends": [
+    "react-app",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["react", "prettier"],
+
+  "rules": {
+    "prettier/prettier": "off",
+    "no-console": [
+      "warn",
+      { "allow": ["info", "warn", "error", "time", "timeEnd", "clear"] }
+    ],
+    "no-debugger": "warn",
+    "no-shadow": "error",
+    "no-unused-vars": [
+      "warn",
+      { "args": "all", "argsIgnorePattern": "^_" }
+    ],
+    "react/display-name": "off",
+    "react/prop-types": "off",
+    "react/jsx-curly-newline": "off",
+    "no-unreachable": "warn"
+  },
+
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "./"]
+      }
+    }
+  }
+}

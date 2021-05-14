@@ -1,70 +1,57 @@
-import React from 'react'
-import './player.css'
+import React from 'react';
+import { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import './player.css';
 
-class Player extends React.Component {
-  constructor(props){
-    super(props)
+function Player({ player, onChange, onDelete }) {
+  const [isEditing, setIsEditing] = useState(false);
 
-    this.state = {
-      editing: false,
-    }
+  const handleEditToggle = useCallback(function () {
+    setIsEditing(state => !state);
+  }, []);
 
-    this.handleEditToggle = this.handleEditToggle.bind(this)
-    this.handleDelete = this.handleDelete.bind(this)
-  }
+  const handleDelete = useCallback(
+    function () {
+      setIsEditing(false);
+      onDelete(player.id);
+    },
+    [onDelete, player.id],
+  );
 
-  handleEditToggle(){
-    const { editing } = this.state
-    this.setState({
-      editing: !editing
-    })
-  }
-
-  handleDelete() {
-    const { player, onDelete } = this.props
-
-    this.setState({
-      editing: false
-    })
-
-    onDelete(player.id)
-  }
-
-  render(){
-    const { player, onChange } = this.props
-    const { editing } = this.state
-
+  if (!isEditing)
     return (
-      editing
-        ? <li className="player">
-            <input
-              className="player-edit-input"
-              defaultValue={player.name}
-              onChange={(event) => onChange(player.id, event.target.value)}
-              autoFocus={true}
-            />
-            <div className="player-edit-controls">
-              <button className="player-edit-done" onClick={this.handleEditToggle}>
-                <i className="fa fa-check" aria-hidden="true"></i>
-              </button>
-              <button className="player-edit-delete" onClick={this.handleDelete}>
-                <i className="fa fa-trash-o" aria-hidden="true"></i>
-              </button>
-            </div>
-          </li>
-        : <li className="player" onClick={this.handleEditToggle}>
-            {player.name}
-          </li>
-    )
-  }
+      <li className="player" onClick={handleEditToggle}>
+        {player.name}
+      </li>
+    );
+
+  return (
+    <li className="player">
+      <input
+        className="player-edit-input"
+        type="text"
+        defaultValue={player.name}
+        onChange={event => onChange(player.id, event.target.value)}
+        autoFocus={true}
+      />
+      <div className="player-edit-controls">
+        <button className="player-edit-done" onClick={handleEditToggle}>
+          <i className="fa fa-check" aria-hidden="true"></i>
+        </button>
+        <button className="player-edit-delete" onClick={handleDelete}>
+          <i className="fa fa-trash-o" aria-hidden="true"></i>
+        </button>
+      </div>
+    </li>
+  );
 }
 
 Player.propTypes = {
-  name: React.PropTypes.string.isRequired,
-}
+  name: PropTypes.string.isRequired,
+};
 
 Player.defaultProps = {
   name: 'New Player',
-}
+};
 
-export default Player
+export default Player;
