@@ -4,8 +4,21 @@
   position: relative;
 }
 
-.player + .player {
-  border-top: 1px solid #e9e9e9;
+.team + .team .player {
+  border: none;
+}
+
+.player:nth-child(odd) {
+  background-color: #f2f2f2;
+  margin-left: -0.5em;
+  padding-left: 0.5em;
+}
+
+.team + .team .player:nth-child(odd) {
+  margin-left: 0;
+  margin-right: -0.5em;
+  padding-left: 0;
+  padding-right: 0.5em;
 }
 
 .player-edit-input {
@@ -32,12 +45,11 @@
   border-radius: 4px;
 }
 
-
 .player-edit-done {
   color: #b8e986;
 }
 
 .player-edit-delete {
-  color: #FF4F6C;
+  color: #ff4f6c;
   padding: 0.25em 0.5em;
 }

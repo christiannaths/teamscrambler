@@ -97,7 +97,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Supergroups!</h1>
+        <h1>Super Teams!</h1>
       </header>
 
       <section className="options">
