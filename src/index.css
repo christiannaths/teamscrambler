@@ -140,25 +140,6 @@ textarea {
   }
 }
 
-.game-shuffle {
-  position: fixed;
-  font-size: 2em;
-  padding: 0.5em;
-  background: var(--app-color);
-  right: 0.5rem;
-  bottom: 0.5rem;
-  border-radius: 50%;
-  border: 2px solid #333;
-  box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-}
-
-.game-shuffle .icon {
-  width: 1em;
-  height: 1em;
-  display: block;
-}
-
 .game-counter {
   margin-bottom: 0.75rem;
 }

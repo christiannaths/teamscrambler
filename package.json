@@ -13,6 +13,8 @@
     "react-scripts": "^4.0.3"
   },
   "dependencies": {
+    "@react-spring/web": "^9.1.2",
+    "@use-gesture/react": "^10.0.0-beta.6",
     "nanoid": "^3.1.23",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

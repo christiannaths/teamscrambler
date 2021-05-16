@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import useStickyState from './useStickyState';
 import Team from './components/Team';
 import logoUrl from './logo.svg';
+import ScrambleButton from './components/ScrambleButton';
 
 function shuffle(a) {
   const data = [...a];
@@ -94,6 +95,14 @@ function App() {
       setTeamSize(Number.parseInt(value, 10));
     },
     [setTeamSize],
+  );
+
+  const handleAppReset = useCallback(
+    function () {
+      setTeamSize(DEFAULT_TEAM_SIZE);
+      setPlayers([...DEFAULT_PLAYERS]);
+    },
+    [setPlayers, setTeamSize],
   );
 
   const [team1, team2, bench] = useMemo(
@@ -218,9 +227,18 @@ function App() {
         />
       </section>
 
-      <button className="game-shuffle" onClick={handlePlayersShuffle}>
-        <i className="icon fa fa-random" aria-hidden="true"></i>
-      </button>
+      <ScrambleButton
+        onClick={handlePlayersShuffle}
+        onThresholdRelease={() => {
+          if (
+            window.confirm(
+              'Are you sure you want to reset? This will reset the roster and settings back to the default values.',
+            )
+          ) {
+            handleAppReset();
+          }
+        }}
+      />
     </div>
   );
 }

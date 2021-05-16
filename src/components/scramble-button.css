@@ -1,0 +1,32 @@
+.scramble-button {
+  position: fixed;
+  font-size: 2em;
+  width: 2em;
+  height: 2em;
+  background-color: var(--app-color);
+  right: 0.5rem;
+  bottom: 0.5rem;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: 500ms ease;
+  transition-property: background-color, width, height;
+}
+
+.scramble-button.-danger {
+  background-color: #ff5e01;
+  color: white;
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.scrable-button .icon {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
