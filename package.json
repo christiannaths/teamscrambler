@@ -5,7 +5,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom"
+    "test": "react-scripts test --env=jsdom",
+    "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
     "@react-spring/web": "^9.1.2",
