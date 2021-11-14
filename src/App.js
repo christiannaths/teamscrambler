@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { nanoid } from 'nanoid';
+import Icon from './components/Icon';
 import useStickyState from './useStickyState';
 import Team from './components/Team';
 import logoUrl from './logo.svg';
@@ -191,8 +192,7 @@ function App() {
           className="options-add-player"
           onClick={handlePlayerAdd}
         >
-          Add&nbsp;Player{' '}
-          <i className="fa fa-user-plus" aria-hidden="true"></i>
+          Add&nbsp;Player <Icon name="person-add" />
         </button>
       </section>
 

@@ -2,10 +2,24 @@
   list-style: none;
   padding: 0.375rem 0;
   position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.player .name {
+  margin-left: 0.25em;
+  margin-right: 0.25em;
+}
+
+.player .icon {
+  fill: var(--team-color);
 }
 
 .team + .team .player {
   border: none;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
 }
 
 .player:nth-child(odd) {
@@ -33,6 +47,7 @@
   position: absolute;
   transform: translateY(4px);
   left: 0;
+  top: 2em;
   z-index: 999;
 }
 

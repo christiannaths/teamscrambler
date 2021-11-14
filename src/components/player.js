@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import Icon from './Icon';
 import './player.css';
 
 function Player({ player, onChange, onDelete }) {
@@ -21,7 +22,8 @@ function Player({ player, onChange, onDelete }) {
   if (!isEditing)
     return (
       <li className="player" onClick={handleEditToggle}>
-        {player.name}
+        <Icon name="shirt" className="icon" />
+        <span className="name">{player.name}</span>
       </li>
     );
 
@@ -39,10 +41,10 @@ function Player({ player, onChange, onDelete }) {
       />
       <div className="player-edit-controls">
         <button className="player-edit-done" onClick={handleEditToggle}>
-          <i className="fa fa-check" aria-hidden="true"></i>
+          <Icon name="checkmark" />
         </button>
         <button className="player-edit-delete" onClick={handleDelete}>
-          <i className="fa fa-trash-o" aria-hidden="true"></i>
+          <Icon name="trash" />
         </button>
       </div>
     </li>

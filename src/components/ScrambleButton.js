@@ -3,11 +3,12 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSpring, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
+import Icon from './Icon';
 import './scramble-button.css';
 
 const MAX_Y = -180;
 
-function MyComponent({ onClick, onThresholdRelease }) {
+function ScrambleButton({ onClick, onThresholdRelease }) {
   const [isMax, setIsMax] = useState(false);
   const [{ y }, animate] = useSpring(() => ({
     y: 0,
@@ -33,19 +34,15 @@ function MyComponent({ onClick, onThresholdRelease }) {
       style={{ y, touchAction: 'none' }}
       {...bind()}
     >
-      {isMax ? (
-        <i className="icon fa fa-trash" aria-hidden="true" />
-      ) : (
-        <i className="icon fa fa-random" aria-hidden="true" />
-      )}
+      {isMax ? <Icon name="trash" /> : <Icon name="shuffle" />}
     </animated.button>
   );
 }
 
-MyComponent.defaultProps = {};
+ScrambleButton.defaultProps = {};
 
-MyComponent.propTypes = {
+ScrambleButton.propTypes = {
   children: PropTypes.any,
 };
 
-export default MyComponent;
+export default ScrambleButton;
