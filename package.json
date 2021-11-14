@@ -1,16 +1,11 @@
 {
-  "name": "supergroups",
+  "name": "team-scrambler",
   "version": "1.0.0",
   "private": true,
-  "devDependencies": {
-    "@prettier/plugin-xml": "^0.13.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react-app": "^6.2.2",
-    "firebase-tools": "^9.10.2",
-    "prettier": "^2.3.0",
-    "react-scripts": "^4.0.3"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom"
   },
   "dependencies": {
     "@react-spring/web": "^9.1.2",
@@ -21,15 +16,18 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "@prettier/plugin-xml": "^0.13.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react-app": "^6.2.2",
+    "firebase-tools": "^9.10.2",
+    "prettier": "^2.3.0",
+    "react-scripts": "^4.0.3"
   },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
   "main": "index.js",
-  "author": "Christian Naths/ExchangeJS",
+  "author": "Christian Naths",
   "license": "SEE LICENSE IN 'LICENSE.md'",
   "browserslist": {
     "production": [
