@@ -23,7 +23,9 @@ function Player({ player, onChange, onDelete }) {
     return (
       <li className="player" onClick={handleEditToggle}>
         <Icon name="shirt" className="icon" />
-        <span className="name">{player.name}</span>
+        <span className="name">
+          {player.name} ({player.gp})
+        </span>
       </li>
     );
 

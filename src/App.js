@@ -18,10 +18,7 @@ function shuffle(a) {
 }
 
 function sortByGp(a, b) {
-  if (a.gp < b.gp) return -1;
-  if (b.gp < a.gp) return 1;
-
-  return 1;
+  return a.gp < b.gp ? -1 : 1;
 }
 
 const DEFAULT_PLAYERS = [
@@ -79,15 +76,17 @@ function App() {
 
   const handlePlayersShuffle = useCallback(
     function () {
-      setPlayers(state => {
-        const shuffledPlayers = shuffle(state);
-        const rankedPlayers = shuffledPlayers.sort(sortByGp);
-        return rankedPlayers;
+      const shuffledPlayers = shuffle(players);
+      const sortedPlayers = shuffledPlayers.sort(sortByGp);
+      const rankedPlayers = sortedPlayers.map((player, index) => {
+        const n = index <= teamSize * 2 - 1 ? 1 : 0;
+        const gp = player.gp + n;
+        return { ...player, gp };
       });
-
+      setPlayers(rankedPlayers);
       setShuffleNotify(true);
     },
-    [setPlayers],
+    [players, setPlayers, teamSize],
   );
 
   const handleTeamSizeChange = useCallback(
@@ -124,40 +123,10 @@ function App() {
     [players, teamSize],
   );
 
-  useEffect(
-    function () {
-      setPlayers(state => {
-        state
-          .filter(player => {
-            return (
-              team1.map(p => p.id).includes(player.id) ||
-              team2.map(p => p.id).includes(player.id)
-            );
-          })
-          .map(player => ({
-            ...player,
-            gp: player.gp + 1,
-          }))
-          .forEach(player => {
-            const playerIndex = state.findIndex(
-              p => p.id === player.id,
-            );
-            state[playerIndex] = player;
-          });
-
-        return state;
-      });
-    },
-    [bench, setPlayers, team1, team2],
-  );
-
-  useEffect(
-    function () {
-      if (!shuffleNotify) return;
-      setShuffleNotify(false);
-    },
-    [shuffleNotify],
-  );
+  useEffect(() => {
+    if (!shuffleNotify) return;
+    setShuffleNotify(false);
+  }, [shuffleNotify]);
 
   return (
     <div className="app">
