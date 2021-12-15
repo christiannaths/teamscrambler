@@ -22,7 +22,6 @@ function Player({ player, color, onChange, onDelete }) {
   if (!isEditing)
     return (
       <li className="player" onClick={handleEditToggle}>
-        {/* <Icon name="shirt" className="icon" style={{ fill: color }} /> */}
         <span className="name">{player.name}</span>
       </li>
     );
@@ -38,6 +37,9 @@ function Player({ player, color, onChange, onDelete }) {
         }
         onChange={event => onChange(player.id, event.target.value)}
         autoFocus={true}
+        onKeyDown={({ keyCode }) => {
+          if ([13, 27, 9].includes(keyCode)) return handleEditToggle();
+        }}
       />
       <div className="player-edit-controls">
         <button className="player-edit-done" onClick={handleEditToggle}>
