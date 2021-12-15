@@ -22,7 +22,7 @@ function Player({ player, color, onChange, onDelete }) {
   if (!isEditing)
     return (
       <li className="player" onClick={handleEditToggle}>
-        <Icon name="shirt" className="icon" style={{ fill: color }} />
+        {/* <Icon name="shirt" className="icon" style={{ fill: color }} /> */}
         <span className="name">{player.name}</span>
       </li>
     );

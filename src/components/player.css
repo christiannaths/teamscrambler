@@ -15,13 +15,6 @@
   fill: var(--team-color);
 }
 
-.team + .team .player {
-  border: none;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-}
-
 .player:nth-child(odd) {
   background-color: #f2f2f2;
   margin-left: -0.5em;

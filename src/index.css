@@ -99,16 +99,17 @@ textarea {
 }
 
 .game-teams {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.game-teams .team + .team {
-  border-left: 1px solid #e0e0e0;
+.game-teams .team:nth-child(even) {
 }
 
-.game-teams .team + .team .team-title {
+.game-teams .team:nth-child(even) .team-title {
+  /* background: tomato;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row-reverse; */
 }
 
 .team-size-field {
@@ -138,6 +139,14 @@ textarea {
   .options {
     margin: 0rem auto;
     max-width: 22em;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1em;
+  }
+
+  .options button {
+    display: grid;
+    justify-items: center;
   }
 
   .game-add-player {

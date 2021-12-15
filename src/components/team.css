@@ -1,10 +1,26 @@
 .team {
   flex: 1;
   text-align: left;
+  margin-top: 1.75em;
 }
 
-.team + .team {
+.team .team-title .icon {
+  margin-right: 0.5em;
+}
+
+.team:nth-child(even) {
   text-align: right;
+}
+
+.team:nth-child(even) .team-title,
+.team:nth-child(even) .player {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.team:nth-child(even) .team-title .icon {
+  margin-right: 0;
+  margin-left: 0.5em;
 }
 
 .team-title {

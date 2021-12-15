@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import Icon from './components/Icon';
 import useStickyState from './useStickyState';
@@ -9,27 +9,25 @@ import ScrambleButton from './components/ScrambleButton';
 import * as arrayUtils from './utils/array';
 
 const DEFAULT_TEAMS = {
-  team1: { name: 'Team 1' },
-  team2: { name: 'Team 2' },
-  team3: { name: 'Team 3' },
+  team1: { name: 'Team 1', color: '#bf3a2b' },
+  team2: { name: 'Team 2', color: '#2880b9' },
 };
 
 const DEFAULT_PLAYERS = [
   { id: nanoid(), name: 'Player 1', gp: 0, teamId: 'team1' },
   { id: nanoid(), name: 'Player 2', gp: 0, teamId: 'team1' },
   { id: nanoid(), name: 'Player 3', gp: 0, teamId: 'team1' },
-  { id: nanoid(), name: 'Player 4', gp: 0, teamId: 'team1' },
+  { id: nanoid(), name: 'Player 4', gp: 0, teamId: null },
   { id: nanoid(), name: 'Player 5', gp: 0, teamId: 'team2' },
   { id: nanoid(), name: 'Player 6', gp: 0, teamId: 'team2' },
   { id: nanoid(), name: 'Player 7', gp: 0, teamId: 'team2' },
-  { id: nanoid(), name: 'Player 8', gp: 0, teamId: 'team2' },
-  { id: nanoid(), name: 'Player 9', gp: 0, teamId: 'team3' },
+  { id: nanoid(), name: 'Player 8', gp: 0, teamId: null },
 ];
 
 const DEFAULT_TEAM_SIZE = 3;
 
 function App() {
-  const [teams, _setTeams] = useStickyState(DEFAULT_TEAMS, 'teams');
+  const [teams, setTeams] = useStickyState(DEFAULT_TEAMS, 'teams');
 
   const [players, setPlayers] = useStickyState(
     DEFAULT_PLAYERS,
@@ -39,11 +37,6 @@ function App() {
   const [teamSize, setTeamSize] = useStickyState(
     DEFAULT_TEAM_SIZE,
     'teamSize',
-  );
-
-  const [teamColors, setTeamColors] = useStickyState(
-    ['#4a90e2', '#d0021b'],
-    'teamColors',
   );
 
   const [shuffleNotify, setShuffleNotify] = useState(false);
@@ -106,10 +99,41 @@ function App() {
 
   const handleAppReset = useCallback(
     function () {
+      setTeams(DEFAULT_TEAMS);
       setTeamSize(DEFAULT_TEAM_SIZE);
       setPlayers([...DEFAULT_PLAYERS]);
     },
-    [setPlayers, setTeamSize],
+    [setPlayers, setTeamSize, setTeams],
+  );
+
+  const handleColorChange = useCallback(
+    function (teamId) {
+      return function (hexColor) {
+        setTeams(state => {
+          const team = state[teamId];
+          const newTeam = { ...team, color: hexColor };
+          return { ...state, [teamId]: newTeam };
+        });
+      };
+    },
+    [setTeams],
+  );
+
+  const handleTeamCountChange = useCallback(
+    function (event) {
+      const newTeams = new Array(+event?.target?.value)
+        .fill(undefined)
+        .reduce((acc, curr, index) => {
+          const existingTeamId = Object.keys(teams)[index];
+
+          return existingTeamId
+            ? { ...acc, [existingTeamId]: teams[existingTeamId] }
+            : { ...acc, [nanoid()]: { name: `team ${index + 1}` } };
+        }, {});
+
+      setTeams(newTeams);
+    },
+    [setTeams, teams],
   );
 
   useEffect(() => {
@@ -129,14 +153,14 @@ function App() {
 
       <section className="options">
         <label
-          className={`team-size-field ${
+          className={`option-control team-size-field ${
             teamSize ? '' : '-strikethrough'
           }`}
         >
           Team Size:
           <input
             type="tel"
-            className="player-edit-input"
+            className="option-control player-edit-input"
             value={teamSize}
             onChange={handleTeamSizeChange}
             autoFocus={false}
@@ -146,8 +170,26 @@ function App() {
           />
         </label>
 
+        <label
+          className={`option-control team-count-field ${
+            teamSize ? '' : '-strikethrough'
+          }`}
+        >
+          # Of Teams:
+          <input
+            type="tel"
+            className="option-control player-edit-input"
+            value={Object.keys(teams).length}
+            onChange={handleTeamCountChange}
+            autoFocus={false}
+            onFocus={({ target }) =>
+              target.setSelectionRange(0, target.value.length)
+            }
+          />
+        </label>
+
         <button
-          className="options-add-player"
+          className="option-control options-add-player"
           onClick={handlePlayerAdd}
         >
           Add&nbsp;Player <Icon name="person-add" />
@@ -169,12 +211,8 @@ function App() {
                 players={players.filter(player => player.teamId === id)}
                 onPlayerChange={handlePlayerChange}
                 onPlayerDelete={handlePlayerDelete}
-                color={teamColors[0]}
-                onColorChange={hexColor =>
-                  setTeamColors(
-                    arrayUtils.setValueAtIndex(teamColors, 0, hexColor),
-                  )
-                }
+                color={team.color}
+                onColorChange={handleColorChange(id)}
               />
             );
           })}
@@ -190,6 +228,7 @@ function App() {
               player.teamId === undefined || player.teamId === null
             );
           })}
+          onColorChange={handleColorChange(null)}
           onPlayerChange={handlePlayerChange}
           onPlayerDelete={handlePlayerDelete}
         />
