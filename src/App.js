@@ -8,34 +8,29 @@ import logoUrl from './logo.svg';
 import ScrambleButton from './components/ScrambleButton';
 import * as arrayUtils from './utils/array';
 
-function shuffle(a) {
-  const data = [...a];
-
-  for (let i = data.length; i; i--) {
-    let j = Math.floor(Math.random() * i);
-    [data[i - 1], data[j]] = [data[j], data[i - 1]];
-  }
-  return data;
-}
-
-function sortByGp(a, b) {
-  return a.gp < b.gp ? -1 : 1;
-}
+const DEFAULT_TEAMS = {
+  team1: { name: 'Team 1' },
+  team2: { name: 'Team 2' },
+  team3: { name: 'Team 3' },
+};
 
 const DEFAULT_PLAYERS = [
-  { id: nanoid(), name: 'Player 1', gp: 0 },
-  { id: nanoid(), name: 'Player 2', gp: 0 },
-  { id: nanoid(), name: 'Player 3', gp: 0 },
-  { id: nanoid(), name: 'Player 4', gp: 0 },
-  { id: nanoid(), name: 'Player 5', gp: 0 },
-  { id: nanoid(), name: 'Player 6', gp: 0 },
-  { id: nanoid(), name: 'Player 7', gp: 0 },
-  { id: nanoid(), name: 'Player 8', gp: 0 },
+  { id: nanoid(), name: 'Player 1', gp: 0, teamId: 'team1' },
+  { id: nanoid(), name: 'Player 2', gp: 0, teamId: 'team1' },
+  { id: nanoid(), name: 'Player 3', gp: 0, teamId: 'team1' },
+  { id: nanoid(), name: 'Player 4', gp: 0, teamId: 'team1' },
+  { id: nanoid(), name: 'Player 5', gp: 0, teamId: 'team2' },
+  { id: nanoid(), name: 'Player 6', gp: 0, teamId: 'team2' },
+  { id: nanoid(), name: 'Player 7', gp: 0, teamId: 'team2' },
+  { id: nanoid(), name: 'Player 8', gp: 0, teamId: 'team2' },
+  { id: nanoid(), name: 'Player 9', gp: 0, teamId: 'team3' },
 ];
 
 const DEFAULT_TEAM_SIZE = 3;
 
 function App() {
+  const [teams, _setTeams] = useStickyState(DEFAULT_TEAMS, 'teams');
+
   const [players, setPlayers] = useStickyState(
     DEFAULT_PLAYERS,
     'players',
@@ -46,10 +41,10 @@ function App() {
     'teamSize',
   );
 
-  const [teamColors, setTeamColors] = useStickyState([
-    '#4a90e2',
-    '#d0021b',
-  ]);
+  const [teamColors, setTeamColors] = useStickyState(
+    ['#4a90e2', '#d0021b'],
+    'teamColors',
+  );
 
   const [shuffleNotify, setShuffleNotify] = useState(false);
 
@@ -82,17 +77,23 @@ function App() {
 
   const handlePlayersShuffle = useCallback(
     function () {
-      const shuffledPlayers = shuffle(players);
-      const sortedPlayers = shuffledPlayers.sort(sortByGp);
-      const rankedPlayers = sortedPlayers.map((player, index) => {
-        const n = index <= teamSize * 2 - 1 ? 1 : 0;
-        const gp = player.gp + n;
-        return { ...player, gp };
-      });
-      setPlayers(rankedPlayers);
-      setShuffleNotify(true);
+      const teamIds = Object.keys(teams);
+      const playersToAssign = teamIds.length * teamSize;
+
+      const newPlayers = arrayUtils
+        .shuffleRandom(players)
+        .map((player, index) => {
+          const teamId =
+            index < playersToAssign
+              ? teamIds[index % teamIds.length]
+              : null;
+
+          return { ...player, teamId: teamId };
+        });
+
+      setPlayers(newPlayers);
     },
-    [players, setPlayers, teamSize],
+    [players, setPlayers, teamSize, teams],
   );
 
   const handleTeamSizeChange = useCallback(
@@ -109,24 +110,6 @@ function App() {
       setPlayers([...DEFAULT_PLAYERS]);
     },
     [setPlayers, setTeamSize],
-  );
-
-  const [team1, team2, bench] = useMemo(
-    function () {
-      if (!teamSize) {
-        const half = Math.ceil(players.length / 2);
-        return [players.slice(0, half), players.slice(half), []];
-      }
-
-      const matchSize = teamSize + teamSize;
-
-      return [
-        players.slice(0, teamSize),
-        players.slice(teamSize, matchSize),
-        players.slice(matchSize),
-      ];
-    },
-    [players, teamSize],
   );
 
   useEffect(() => {
@@ -178,37 +161,35 @@ function App() {
           Game #{Math.max(...players.map(p => p.gp))}
         </div>
         <div className="game-teams">
-          <Team
-            name="Team 1"
-            players={team1}
-            onPlayerChange={handlePlayerChange}
-            onPlayerDelete={handlePlayerDelete}
-            color={teamColors[0]}
-            onColorChange={hexColor =>
-              setTeamColors(
-                arrayUtils.setValueAtIndex(teamColors, 0, hexColor),
-              )
-            }
-          />
-          <Team
-            name="Team 2"
-            players={team2}
-            onPlayerChange={handlePlayerChange}
-            onPlayerDelete={handlePlayerDelete}
-            color={teamColors[1]}
-            onColorChange={hexColor =>
-              setTeamColors(
-                arrayUtils.setValueAtIndex(teamColors, 1, hexColor),
-              )
-            }
-          />
+          {Object.entries(teams).map(([id, team]) => {
+            return (
+              <Team
+                key={id}
+                name={team.name}
+                players={players.filter(player => player.teamId === id)}
+                onPlayerChange={handlePlayerChange}
+                onPlayerDelete={handlePlayerDelete}
+                color={teamColors[0]}
+                onColorChange={hexColor =>
+                  setTeamColors(
+                    arrayUtils.setValueAtIndex(teamColors, 0, hexColor),
+                  )
+                }
+              />
+            );
+          })}
         </div>
       </section>
 
       <section className="bench">
+        {/* bug in setting bench team color */}
         <Team
           name="Bench"
-          players={bench}
+          players={players.filter(player => {
+            return (
+              player.teamId === undefined || player.teamId === null
+            );
+          })}
           onPlayerChange={handlePlayerChange}
           onPlayerDelete={handlePlayerDelete}
         />
