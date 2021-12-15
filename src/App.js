@@ -6,6 +6,7 @@ import useStickyState from './useStickyState';
 import Team from './components/Team';
 import logoUrl from './logo.svg';
 import ScrambleButton from './components/ScrambleButton';
+import * as arrayUtils from './utils/array';
 
 function shuffle(a) {
   const data = [...a];
@@ -44,6 +45,11 @@ function App() {
     DEFAULT_TEAM_SIZE,
     'teamSize',
   );
+
+  const [teamColors, setTeamColors] = useStickyState([
+    '#4a90e2',
+    '#d0021b',
+  ]);
 
   const [shuffleNotify, setShuffleNotify] = useState(false);
 
@@ -177,12 +183,24 @@ function App() {
             players={team1}
             onPlayerChange={handlePlayerChange}
             onPlayerDelete={handlePlayerDelete}
+            color={teamColors[0]}
+            onColorChange={hexColor =>
+              setTeamColors(
+                arrayUtils.setValueAtIndex(teamColors, 0, hexColor),
+              )
+            }
           />
           <Team
             name="Team 2"
             players={team2}
             onPlayerChange={handlePlayerChange}
             onPlayerDelete={handlePlayerDelete}
+            color={teamColors[1]}
+            onColorChange={hexColor =>
+              setTeamColors(
+                arrayUtils.setValueAtIndex(teamColors, 1, hexColor),
+              )
+            }
           />
         </div>
       </section>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Icon from './Icon';
 import './player.css';
 
-function Player({ player, onChange, onDelete }) {
+function Player({ player, color, onChange, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEditToggle = useCallback(function () {
@@ -22,7 +22,7 @@ function Player({ player, onChange, onDelete }) {
   if (!isEditing)
     return (
       <li className="player" onClick={handleEditToggle}>
-        <Icon name="shirt" className="icon" />
+        <Icon name="shirt" className="icon" style={{ fill: color }} />
         <span className="name">{player.name}</span>
       </li>
     );

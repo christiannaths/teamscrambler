@@ -1,12 +1,10 @@
 .team {
   flex: 1;
   text-align: left;
-  --team-color: #4a90e2;
 }
 
 .team + .team {
   text-align: right;
-  --team-color: #d0021b;
 }
 
 .team-title {
