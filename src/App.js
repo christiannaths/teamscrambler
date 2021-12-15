@@ -123,7 +123,7 @@ function App() {
     function (event) {
       const newTeams = new Array(+event?.target?.value)
         .fill(undefined)
-        .reduce((acc, curr, index) => {
+        .reduce((acc, _curr, index) => {
           const existingTeamId = Object.keys(teams)[index];
 
           return existingTeamId

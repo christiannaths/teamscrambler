@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Icon from './Icon';
 import './player.css';
 
-function Player({ player, color, onChange, onDelete }) {
+function Player({ player, onChange, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEditToggle = useCallback(function () {
