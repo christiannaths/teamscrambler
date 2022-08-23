@@ -5,6 +5,7 @@ import {
   IoShirt,
   IoCheckmark,
   IoPersonAdd,
+  IoSettingsSharp,
 } from 'react-icons/io5';
 
 function Icon(props) {
@@ -15,6 +16,7 @@ function Icon(props) {
     shuffle: IoShuffle,
     shirt: IoShirt,
     checkmark: IoCheckmark,
+    settings: IoSettingsSharp,
     'person-add': IoPersonAdd,
   }[name];
 

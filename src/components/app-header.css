@@ -1,0 +1,41 @@
+.app-header > .content {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  width: 22rem;
+}
+
+.app-header .options .option-control {
+  margin-top: 1rem;
+}
+
+.app-header .options .-number-field input {
+  background: #f1f3f4;
+  padding: 0.25rem 0.5rem;
+  width: 5ch;
+  margin-left: 0.5rem;
+  font-weight: normal;
+}
+
+.app-header .options footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 0.5rem;
+  margin-top: 1rem;
+}
+
+.app-header .options footer button {
+  padding: 0.5rem;
+}
+
+.app-header .options footer button.submit-button {
+  background-color: #5bb9f6;
+  color: white;
+}
+
+.app-header .options footer button.reset-button {
+  font-weight: normal;
+  font-size: 0.8rem;
+  color: #ff5f00;
+}

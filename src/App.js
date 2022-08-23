@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState, useCallback, useEffect } from 'react';
 import { nanoid } from 'nanoid';
-import Icon from './components/Icon';
 import useStickyState from './useStickyState';
+import AppHeader from './components/AppHeader';
 import Team from './components/Team';
-import logoUrl from './logo.svg';
+
 import ScrambleButton from './components/ScrambleButton';
+
 import * as arrayUtils from './utils/array';
 
 const DEFAULT_TEAMS = {
@@ -106,6 +107,25 @@ function App() {
     [setPlayers, setTeamSize, setTeams],
   );
 
+  const handleOptionsSubmit = useCallback(
+    function () {
+      const teamIds = Object.keys(teams);
+      const playersToAssign = teamIds.length * teamSize;
+
+      const newPlayers = players.map((player, index) => {
+        const teamId =
+          index < playersToAssign
+            ? teamIds[index % teamIds.length]
+            : null;
+
+        return { ...player, teamId: teamId };
+      });
+
+      setPlayers(newPlayers);
+    },
+    [players, setPlayers, teamSize, teams],
+  );
+
   const handleColorChange = useCallback(
     function (teamId) {
       return function (hexColor) {
@@ -143,59 +163,15 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <img
-          className="app-header-logo"
-          src={logoUrl}
-          alt="Team Scrambler"
-        />
-      </header>
-
-      <section className="options">
-        <label
-          className={`option-control team-size-field ${
-            teamSize ? '' : '-strikethrough'
-          }`}
-        >
-          Team Size:
-          <input
-            type="tel"
-            className="option-control player-edit-input"
-            value={teamSize}
-            onChange={handleTeamSizeChange}
-            autoFocus={false}
-            onFocus={({ target }) =>
-              target.setSelectionRange(0, target.value.length)
-            }
-          />
-        </label>
-
-        <label
-          className={`option-control team-count-field ${
-            teamSize ? '' : '-strikethrough'
-          }`}
-        >
-          # Of Teams:
-          <input
-            type="tel"
-            className="option-control player-edit-input"
-            value={Object.keys(teams).length}
-            onChange={handleTeamCountChange}
-            autoFocus={false}
-            onFocus={({ target }) =>
-              target.setSelectionRange(0, target.value.length)
-            }
-          />
-        </label>
-
-        <button
-          className="option-control options-add-player"
-          onClick={handlePlayerAdd}
-        >
-          Add&nbsp;Player <Icon name="person-add" />
-        </button>
-      </section>
-
+      <AppHeader
+        teams={teams}
+        teamSize={teamSize}
+        onTeamSizeChange={handleTeamSizeChange}
+        onTeamCountChange={handleTeamCountChange}
+        onPlayerAdd={handlePlayerAdd}
+        onSubmit={handleOptionsSubmit}
+        onReset={handleAppReset}
+      />
       <section
         className={`game ${shuffleNotify ? '-flash' : '-no-flash'}`}
       >
