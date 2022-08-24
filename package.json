@@ -6,9 +6,10 @@
   "private": true,
   "scripts": {
     "start": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
     "serve": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.8",
@@ -21,7 +22,8 @@
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-icons": "^4.4.0"
+    "react-icons": "^4.4.0",
+    "react-stopwatch": "^2.0.4"
   },
   "devDependencies": {
     "@prettier/plugin-xml": "^0.13.1",

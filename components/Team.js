@@ -1,17 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Heading,
-  Container,
-  Box,
-  StackDivider,
-  VStack,
-  HStack,
-  Icon,
-} from '@chakra-ui/react';
-import { IoShirt } from 'react-icons/io5';
+import { Heading, Box } from '@chakra-ui/react';
+import Player from '../components/Player';
 
-function Team({ name, players }) {
+function Team({
+  name,
+  players,
+  color,
+  onChangePlayerName,
+  onDeletePlayer,
+}) {
   return (
     <Box mt={4}>
       <Heading
@@ -25,18 +23,15 @@ function Team({ name, players }) {
       </Heading>
 
       {players.map(player => (
-        <Box
+        <Player
           key={player.id}
-          p={4}
-          borderWidth="1px"
-          mt="-1px"
-          bg="white"
-        >
-          <HStack>
-            <Icon as={IoShirt} />
-            <Box fontWeight="bold">{player.name}</Box>
-          </HStack>
-        </Box>
+          name={player.name}
+          id={player.id}
+          gamesPlayed={player.gp}
+          onChange={onChangePlayerName}
+          onDelete={onDeletePlayer}
+          color={color}
+        />
       ))}
     </Box>
   );
@@ -49,6 +44,7 @@ Team.defaultProps = {
 Team.propTypes = {
   name: PropTypes.string,
   players: PropTypes.array,
+  onChangePlayerName: PropTypes.func.isRequired,
 };
 
 export default Team;

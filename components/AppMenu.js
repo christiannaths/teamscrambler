@@ -38,8 +38,9 @@ import {
   ModalFooter,
   useBoolean,
 } from '@chakra-ui/react';
-import { IoShuffle, IoSettingsSharp } from 'react-icons/io5';
+import { IoSettingsSharp } from 'react-icons/io5';
 import NumberField from '../ui/NumberField';
+import StackedButton from '../ui/StackedButton';
 
 function AppMenu({
   teamSize,
@@ -49,19 +50,25 @@ function AppMenu({
   onChangeTeamCount,
   onChangePlayerCount,
   onReset,
+  maxTeamCount,
+  ButtonIcon,
 }) {
-  const initialFocusRef = React.useRef();
-  const { isOpen, onToggle, onClose, onOpen } = useDisclosure();
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const [confirmReset, setConfirmReset] = useBoolean();
 
-  function handlePromptReset() {}
+  function handleReset() {
+    setConfirmReset.off();
+    onClose();
+    onReset();
+  }
 
   return (
     <>
-      <IconButton
+      <StackedButton
         onClick={onOpen}
         variant="ghost"
-        icon={<IoSettingsSharp />}
+        TopIcon={ButtonIcon}
+        label="Settings"
       />
 
       <Modal
@@ -84,9 +91,9 @@ function AppMenu({
               <NumberField
                 label="Number of Teams"
                 value={teamCount}
-                onChange={() => {}}
+                onChange={onChangeTeamCount}
                 min={1}
-                max={10}
+                max={maxTeamCount}
               />
               <NumberField
                 label="Team Size"
@@ -99,7 +106,7 @@ function AppMenu({
 
           <ModalFooter>
             <Button
-              onClick={setConfirmReset.on}
+              onClick={confirmReset ? handleReset : setConfirmReset.on}
               mr={3}
               size="sm"
               variant="ghost"

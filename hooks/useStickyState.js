@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
 
-function useStickyState(defaultValue, key) {
+function useStickyState(defaultValue, key, type) {
   const stateKey = `superteams_${key}`;
 
   const [value, setValue] = useState(() => {
     if (typeof window === 'undefined') return defaultValue;
 
     const stickyValue = window?.localStorage.getItem(stateKey);
-    return stickyValue !== null
-      ? JSON.parse(stickyValue)
-      : defaultValue;
+
+    console.log({ stickyValue });
+
+    if (stickyValue === null) return defaultValue;
+    if (type === 'number') return parseInt(stickyValue, 10);
+    return JSON.parse(stickyValue);
   });
 
   useEffect(() => {

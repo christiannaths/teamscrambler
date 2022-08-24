@@ -1,16 +1,16 @@
 import { useState, useMemo, useCallback } from 'react';
 import {
   Container,
-  Box,
   VStack,
   HStack,
-  IconButton,
-  Button,
+  Stat,
+  StatLabel,
+  StatNumber,
 } from '@chakra-ui/react';
-import { IoShuffle, IoShirt } from 'react-icons/io5';
-import AppMenu from '../components/AppMenu';
+import AppBar from '../components/AppBar';
 import Team from '../components/Team';
 import { shortId } from '../utils/crypt';
+import useStickyState from '../hooks/useStickyState';
 import { shuffle, groupBy, isEqual, last } from 'lodash';
 
 function createPlayer(defaultName) {
@@ -23,37 +23,48 @@ export default function Home({
   defaultPlayers,
   defaultTeamSize,
   defaultTeamCount,
+  teamColors,
 }) {
-  const [players, setPlayers] = useState(defaultPlayers);
-  const [teamSize, setTeamSize] = useState(defaultTeamSize);
-  const [teamCount, setTeamCount] = useState(defaultTeamCount);
+  const [players, setPlayers] = useStickyState(
+    defaultPlayers,
+    'players',
+  );
+  const [teamSize, setTeamSize] = useStickyState(
+    defaultTeamSize,
+    'teamSize',
+    'number',
+  );
+  const [teamCount, setTeamCount] = useStickyState(
+    defaultTeamCount,
+    'teamCount',
+    'number',
+  );
   const [gameHistory, setGameHistory] = useState([]);
 
-  const createGame = useCallback(
+  const gameCount = gameHistory.length;
+
+  const handleCreateGame = useCallback(
     (_, retries = 0) => {
       const maxPlayers = teamCount * teamSize;
-      const shuffledPlayers = shuffle(players)
-        .sort((a, b) => a.gp - b.gp)
-        .map((player, i) => {
-          const teamNum = (i % teamCount) + 1;
-          player.gp = i < maxPlayers ? player.gp + 1 : player.gp;
-          player.team = i < maxPlayers ? `Team ${teamNum}` : 'Bench';
-          return player;
-        });
+      const shuffledPlayers = shuffle(players).sort(
+        (a, b) => a.gp - b.gp,
+      );
 
       const newHistory = shuffledPlayers.map(d => d.id);
       const isRepeat = isEqual(newHistory, last(gameHistory));
 
       if (isRepeat && retries < 10) {
-        return createGame(_, retries + 1);
+        return handleCreateGame(_, retries + 1);
       }
 
       retries = 0;
 
       const newGamePlayers = shuffledPlayers.map((player, i) => {
-        player.gp = i < maxPlayers ? player.gp + 1 : player.gp;
-        player.team = i < maxPlayers ? i % teamCount : undefined;
-        return player;
+        return {
+          ...player,
+          gp: i < maxPlayers ? player.gp + 1 : player.gp,
+          team: i < maxPlayers ? i % teamCount : undefined,
+        };
       });
 
       setPlayers(newGamePlayers);
@@ -63,8 +74,9 @@ export default function Home({
   );
 
   const teams = useMemo(() => {
+    if (!gameCount) return { undefined: players };
     return groupBy(players, d => d.team);
-  }, [players]);
+  }, [players, gameCount]);
 
   function handleChangePlayerCount(count) {
     const diff = count - players.length;
@@ -73,6 +85,7 @@ export default function Home({
 
     const newPlayers = new Array(diff).fill().map(createPlayer);
 
+    setGameHistory([]);
     setPlayers(state =>
       [...newPlayers, ...state].map(d => ({ ...d, gp: 0 })),
     );
@@ -82,72 +95,105 @@ export default function Home({
     handleChangePlayerCount(players.length + 1);
   }
 
-  return (
-    <Container>
-      <Box as="header" py={4}>
-        <HStack justify="space-between">
-          <AppMenu
-            teamSize={teamSize}
-            teamCount={teamCount}
-            playerCount={players.length}
-            onChangeTeamSize={val => setTeamSize(val)}
-            onChangeTeamCount={val => setTeamCount(val)}
-            onChangePlayerCount={handleChangePlayerCount}
-          />
+  function handleChangePlayerName(playerId, value) {
+    setPlayers(state => {
+      state.find(d => d.id === playerId).name = value;
+      return state;
+    });
+  }
 
-          <Button
-            variant="ghost"
-            leftIcon={<IoShirt />}
-            onClick={handleAddPlayer}
-          >
-            Add Player
-          </Button>
+  function handleDeletePlayer(playerId) {
+    setPlayers(state => state.filter(d => d.id !== playerId));
+  }
+
+  function handleReset() {
+    setPlayers(defaultPlayers);
+    setTeamSize(defaultTeamSize);
+    setTeamCount(defaultTeamCount);
+    setGameHistory([]);
+  }
+
+  return (
+    <Container pb="100px">
+      <header>
+        <HStack spacing={4} align="center" justify="center" pt={4}>
+          <Stat align="center">
+            <StatLabel>Player Count</StatLabel>
+            <StatNumber>{players.length}</StatNumber>
+          </Stat>
+
+          <Stat align="center">
+            <StatLabel>Games Played</StatLabel>
+            <StatNumber>{gameCount}</StatNumber>
+          </Stat>
         </HStack>
-      </Box>
+      </header>
+
       <main>
         <VStack spacing={8} align="stretch">
           {Object.keys(teams).map(key => {
-            const teamIndex = Number.parseInt(key, 10) + 1;
-            const name = teamIndex ? `Team ${teamIndex}` : 'Bench';
+            const teamIndex = Number.parseInt(key, 10);
+            const isBench = !Number.isFinite(teamIndex);
+            const name = isBench ? 'Bench' : `Team ${teamIndex + 1}`;
             const players = teams[key];
-
-            return <Team key={name} name={name} players={players} />;
+            const color = isBench ? 'gray.400' : teamColors[teamIndex];
+            return (
+              <Team
+                key={name}
+                name={name}
+                players={players}
+                color={color}
+                onChangePlayerName={handleChangePlayerName}
+                onDeletePlayer={handleDeletePlayer}
+              />
+            );
           })}
         </VStack>
       </main>
-      <Box
-        as="footer"
-        pos="fixed"
-        right="4"
-        bottom="4"
-        transform="scale(1.5)"
-        transformOrigin="right bottom"
-      >
-        <IconButton
-          size="lg"
-          fontSize="4xl"
-          isRound
-          icon={<IoShuffle />}
-          colorScheme="yellow"
-          onClick={createGame}
-        ></IconButton>
-      </Box>
+
+      <AppBar
+        maxTeamCount={teamColors.length}
+        playerCount={players.length}
+        teamCount={teamCount}
+        teamSize={teamSize}
+        onChangeTeamSize={val => setTeamSize(+val)}
+        onChangeTeamCount={val => setTeamCount(+val)}
+        onChangePlayerCount={handleChangePlayerCount}
+        onReset={handleReset}
+        onAddPlayer={handleAddPlayer}
+        onCreateGame={handleCreateGame}
+      />
     </Container>
   );
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   const defaultPlayers = new Array(8).fill().map((_, i) => {
     return createPlayer(`Player ${i + 1}`);
   });
   const defaultTeamSize = 3;
   const defaultTeamCount = 2;
+  const teamColors = [
+    'red.600',
+    'blue.600',
+    'green.600',
+    'purple.600',
+    'pink.500',
+    'yellow.400',
+    'teal.400',
+    'cyan.400',
+    'orange.500',
+    'gray.800',
+    'magenta',
+    'lime',
+  ];
 
   return {
     props: {
       defaultPlayers,
       defaultTeamSize,
       defaultTeamCount,
+      teamColors,
     },
   };
 }
