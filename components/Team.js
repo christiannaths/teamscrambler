@@ -13,33 +13,32 @@ import { IoShirt } from 'react-icons/io5';
 
 function Team({ name, players }) {
   return (
-    <div>
-      <Heading as="h3" size="md">
+    <Box mt={4}>
+      <Heading
+        as="h3"
+        size="xs"
+        mb={2}
+        fontWeight="semibold"
+        textTransform="uppercase"
+      >
         {name}
       </Heading>
-      <Box
-        w="100%"
-        p={4}
-        borderWidth="1px"
-        borderRadius="lg"
-        bg="white"
-      >
-        <VStack
-          divider={<StackDivider borderColor="gray.200" />}
-          spacing={4}
-          align="stretch"
+
+      {players.map(player => (
+        <Box
+          key={player.id}
+          p={4}
+          borderWidth="1px"
+          mt="-1px"
+          bg="white"
         >
-          {players.map(player => (
-            <Box key={player.id}>
-              <HStack>
-                <Icon as={IoShirt} />
-                <Box fontWeight="bold">{player.name}</Box>
-              </HStack>
-            </Box>
-          ))}
-        </VStack>
-      </Box>
-    </div>
+          <HStack>
+            <Icon as={IoShirt} />
+            <Box fontWeight="bold">{player.name}</Box>
+          </HStack>
+        </Box>
+      ))}
+    </Box>
   );
 }
 

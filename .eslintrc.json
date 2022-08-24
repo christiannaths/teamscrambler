@@ -2,32 +2,21 @@
   "extends": [
     "eslint:recommended",
     "plugin:prettier/recommended",
-    "next/core-web-vitals"
+    "next"
   ],
-  "plugins": ["react", "prettier"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
   "rules": {
-    "prettier/prettier": "off",
-    "no-console": [
-      "warn",
-      { "allow": ["info", "warn", "error", "time", "timeEnd", "clear"] }
-    ],
-    "no-debugger": "warn",
-    "no-shadow": "error",
+    "no-empty-function": "off",
     "no-unused-vars": [
       "warn",
-      { "args": "all", "argsIgnorePattern": "^_" }
-    ],
-    "react/display-name": "off",
-    "react/prop-types": "off",
-    "react/jsx-curly-newline": "off",
-    "no-unreachable": "warn"
-  },
-
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "moduleDirectory": ["node_modules", "./"]
+      {
+        "args": "all",
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
       }
-    }
+    ]
   }
 }

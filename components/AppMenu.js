@@ -29,76 +29,108 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  useBoolean,
 } from '@chakra-ui/react';
 import { IoShuffle, IoSettingsSharp } from 'react-icons/io5';
+import NumberField from '../ui/NumberField';
 
-function AppMenu({ teamSize, onChangeTeamSize }) {
+function AppMenu({
+  teamSize,
+  playerCount,
+  teamCount,
+  onChangeTeamSize,
+  onChangeTeamCount,
+  onChangePlayerCount,
+  onReset,
+}) {
   const initialFocusRef = React.useRef();
   const { isOpen, onToggle, onClose, onOpen } = useDisclosure();
+  const [confirmReset, setConfirmReset] = useBoolean();
+
+  function handlePromptReset() {}
 
   return (
-    <Popover
-      placement="top-start"
-      initialFocusRef={initialFocusRef}
-      closeOnBlur={false}
-      isOpen={isOpen}
-    >
-      <PopoverTrigger>
-        <IconButton onClick={onOpen} icon={<IoSettingsSharp />} />
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverHeader fontWeight="semibold">Settings</PopoverHeader>
-        <PopoverArrow />
-        <PopoverCloseButton />
-        <PopoverBody>
-          <VStack spacing={4} align="stretch">
-            <HStack spacing={4} justify="space-between" align="center">
-              <Text fontWeight="bold">Team Size</Text>
-              <NumberInput
-                value={teamSize}
-                min={2}
-                max={200}
-                size="sm"
-                maxW={24}
-                onChange={onChangeTeamSize}
-              >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </HStack>
-          </VStack>
-        </PopoverBody>
-        <PopoverFooter
-          border="1"
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          pb={4}
-        >
-          <Button variant="outline" size="sm">
-            Reset
-          </Button>
+    <>
+      <IconButton
+        onClick={onOpen}
+        variant="ghost"
+        icon={<IoSettingsSharp />}
+      />
 
-          <Button
-            onClick={onClose}
-            colorScheme="blue"
-            ref={initialFocusRef}
-          >
-            Done
-          </Button>
-        </PopoverFooter>
-      </PopoverContent>
-    </Popover>
+      <Modal
+        closeOnOverlayClick={false}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent m={4}>
+          <ModalHeader>Settings</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <VStack spacing={4} align="stretch">
+              <NumberField
+                label="Number of Players"
+                value={playerCount}
+                onChange={onChangePlayerCount}
+                min={0}
+              />
+              <NumberField
+                label="Number of Teams"
+                value={teamCount}
+                onChange={() => {}}
+                min={1}
+                max={10}
+              />
+              <NumberField
+                label="Team Size"
+                value={teamSize}
+                onChange={onChangeTeamSize}
+                min={1}
+              />
+            </VStack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              onClick={setConfirmReset.on}
+              mr={3}
+              size="sm"
+              variant="ghost"
+              color={confirmReset ? 'red.500' : ''}
+            >
+              {confirmReset
+                ? 'Reset all settings and players?'
+                : 'Reset'}
+            </Button>
+            <Button
+              size="sm"
+              onClick={confirmReset ? setConfirmReset.off : onClose}
+              colorScheme={confirmReset ? 'gray' : 'blue'}
+            >
+              {confirmReset ? 'Cancel' : 'Done'}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
 
-AppMenu.defaultProps = {};
+AppMenu.defaultProps = {
+  onReset: () => {},
+};
 
 AppMenu.propTypes = {
-  children: PropTypes.any,
+  teamSize: PropTypes.number.isRequired,
+  playerCount: PropTypes.number.isRequired,
+  teamCount: PropTypes.number.isRequired,
 };
 
 export default AppMenu;
