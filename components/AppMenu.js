@@ -71,11 +71,7 @@ function AppMenu({
         label="Settings"
       />
 
-      <Modal
-        closeOnOverlayClick={false}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent m={4}>
           <ModalHeader>Settings</ModalHeader>
@@ -112,9 +108,7 @@ function AppMenu({
               variant="ghost"
               color={confirmReset ? 'red.500' : ''}
             >
-              {confirmReset
-                ? 'Reset all settings and players?'
-                : 'Reset'}
+              {confirmReset ? 'Reset all settings and players?' : 'Reset'}
             </Button>
             <Button
               size="sm"

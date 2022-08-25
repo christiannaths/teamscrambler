@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-} from 'react';
+import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { useBoolean } from '@chakra-ui/react';
 
 function getTimeObjectAsMs({ h = 0, m = 0, s = 0 } = {}) {
@@ -17,9 +11,7 @@ function getTimeObjectAsMs({ h = 0, m = 0, s = 0 } = {}) {
 function getMsAsTimeObject(timeInMs) {
   const h = Math.floor(timeInMs / (60 * 60 * 1000));
 
-  const m = Math.floor(
-    (timeInMs - getTimeObjectAsMs({ h })) / (60 * 1000),
-  );
+  const m = Math.floor((timeInMs - getTimeObjectAsMs({ h })) / (60 * 1000));
 
   const s = Math.floor((timeInMs - getTimeObjectAsMs({ h, m })) / 1000);
   const ms = Math.floor(timeInMs - getTimeObjectAsMs({ h, m, s }));
@@ -67,10 +59,7 @@ function useCountdownTimer({
   useEffect(() => {
     if (!isRunning) return clearTimeout(timer.current);
     if (timeLeft === 0) return clearTimeout(timer.current);
-    timer.current = setTimeout(
-      () => setTimeLeft(timeLeft - step),
-      step,
-    );
+    timer.current = setTimeout(() => setTimeLeft(timeLeft - step), step);
     return () => clearTimeout(timer.current);
   }, [timeLeft, isRunning, step]);
 

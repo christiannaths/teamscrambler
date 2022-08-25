@@ -10,10 +10,7 @@ import {
   Button,
   Text,
 } from '@chakra-ui/react';
-import {
-  IoShirt,
-  IoRemoveCircleOutline as RemoveIcon,
-} from 'react-icons/io5';
+import { IoShirt, IoRemoveCircleOutline as RemoveIcon } from 'react-icons/io5';
 import {
   RiPushpin2Fill as PinnedIcon,
   RiPushpinLine as UnpinnedIcon,
@@ -50,9 +47,7 @@ function Player({
           onChange={evt => setValue(evt.target.value)}
           onBlur={handleSubmit}
         />
-        {showGamesPlayed && (
-          <Text fontSize="xs">GP:&nbsp;{gamesPlayed}</Text>
-        )}
+        {showGamesPlayed && <Text fontSize="xs">GP:&nbsp;{gamesPlayed}</Text>}
 
         <IconButton
           variant="ghost"
@@ -60,9 +55,7 @@ function Player({
           fontSize="lg"
           icon={isPinned ? <PinnedIcon /> : <UnpinnedIcon />}
           color={isPinned ? 'gray.700' : 'gray.300'}
-          onClick={() =>
-            isPinned ? onUnPinPlayer(id) : onPinPlayer(id)
-          }
+          onClick={() => (isPinned ? onUnPinPlayer(id) : onPinPlayer(id))}
         />
         {isDeleting ? (
           <>

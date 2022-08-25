@@ -1,11 +1,5 @@
 import PropTypes from 'prop-types';
-import {
-  Box,
-  HStack,
-  StackDivider,
-  IconButton,
-  Container,
-} from '@chakra-ui/react';
+import { Box, HStack, StackDivider, IconButton, Container } from '@chakra-ui/react';
 // import { IoIosMore as SettingsIcon } from 'react-icons/io';
 import {
   IoShuffle as ShuffleIcon,

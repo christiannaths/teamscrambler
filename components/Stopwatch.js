@@ -57,11 +57,7 @@ function Countdown() {
 
   console.log(timer.currentTime.ms);
 
-  return [
-    timer.currentTime.s,
-    '.',
-    Math.round(timer.currentTime.ms / 100),
-  ];
+  return [timer.currentTime.s, '.', Math.round(timer.currentTime.ms / 100)];
 }
 
 const Stopwatch = () => {
@@ -77,11 +73,7 @@ const Stopwatch = () => {
         label="Timer"
       />
 
-      <Modal
-        closeOnOverlayClick={false}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent m={4}>
           <ModalHeader>Stopwatch</ModalHeader>
@@ -101,11 +93,7 @@ const Stopwatch = () => {
               Reset
             </Button>
 
-            <Button
-              onClick={setIsRunning.toggle}
-              mr={3}
-              colorScheme="blue"
-            >
+            <Button onClick={setIsRunning.toggle} mr={3} colorScheme="blue">
               Start
             </Button>
           </ModalFooter>

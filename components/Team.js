@@ -14,13 +14,7 @@ function Team({
 }) {
   return (
     <Box mt={4}>
-      <Heading
-        as="h3"
-        size="xs"
-        mb={2}
-        fontWeight="semibold"
-        textTransform="uppercase"
-      >
+      <Heading as="h3" size="xs" mb={2} fontWeight="semibold" textTransform="uppercase">
         {name}
       </Heading>
 

@@ -25,15 +25,8 @@ export default function Home({
   defaultTeamCount,
   teamColors,
 }) {
-  const [players, setPlayers] = useStickyState(
-    defaultPlayers,
-    'players',
-  );
-  const [teamSize, setTeamSize] = useStickyState(
-    defaultTeamSize,
-    'teamSize',
-    'number',
-  );
+  const [players, setPlayers] = useStickyState(defaultPlayers, 'players');
+  const [teamSize, setTeamSize] = useStickyState(defaultTeamSize, 'teamSize', 'number');
   const [teamCount, setTeamCount] = useStickyState(
     defaultTeamCount,
     'teamCount',
@@ -45,9 +38,7 @@ export default function Home({
 
   const handleCreateGame = useCallback(
     (_, retries = 0) => {
-      const pinnedPlayers = players.filter(p =>
-        Number.isFinite(p.pinned),
-      );
+      const pinnedPlayers = players.filter(p => Number.isFinite(p.pinned));
 
       const maxPlayers = teamCount * teamSize;
       const shuffledPlayers = shuffle(players)
@@ -56,15 +47,11 @@ export default function Home({
 
       const mutableShuffledPlayers = shuffledPlayers.slice();
 
-      const replacedPinnedPlayers = new Array(players.length)
-        .fill()
-        .map((_, i) => {
-          const maybePinnedPlayer = pinnedPlayers.find(
-            p => p.pinned === i,
-          );
-          if (maybePinnedPlayer) return maybePinnedPlayer;
-          return mutableShuffledPlayers.shift();
-        });
+      const replacedPinnedPlayers = new Array(players.length).fill().map((_, i) => {
+        const maybePinnedPlayer = pinnedPlayers.find(p => p.pinned === i);
+        if (maybePinnedPlayer) return maybePinnedPlayer;
+        return mutableShuffledPlayers.shift();
+      });
 
       const newHistory = replacedPinnedPlayers.map(d => d.id);
       const isRepeat = isEqual(newHistory, last(gameHistory));
@@ -108,9 +95,7 @@ export default function Home({
     const newPlayers = new Array(diff).fill().map(createPlayer);
 
     setGameHistory([]);
-    setPlayers(state =>
-      [...newPlayers, ...state].map(d => ({ ...d, gp: 0 })),
-    );
+    setPlayers(state => [...newPlayers, ...state].map(d => ({ ...d, gp: 0 })));
   }
 
   function handleAddPlayer() {

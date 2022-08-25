@@ -1,14 +1,7 @@
 import PropTypes from 'prop-types';
 import { VStack, Button, Text } from '@chakra-ui/react';
 
-function StackedButton({
-  variant,
-  onClick,
-  TopIcon,
-  BottomIcon,
-  label,
-  ...rest
-}) {
+function StackedButton({ variant, onClick, TopIcon, BottomIcon, label, ...rest }) {
   return (
     <Button onClick={onClick} variant={variant} {...rest}>
       <VStack>
