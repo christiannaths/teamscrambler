@@ -10,16 +10,26 @@ import {
   Button,
   Text,
 } from '@chakra-ui/react';
-import { IoShirt, IoCloseOutline as RemoveIcon } from 'react-icons/io5';
+import {
+  IoShirt,
+  IoRemoveCircleOutline as RemoveIcon,
+} from 'react-icons/io5';
+import {
+  RiPushpin2Fill as PinnedIcon,
+  RiPushpinLine as UnpinnedIcon,
+} from 'react-icons/ri';
 
 function Player({
   id,
   name,
   showGamesPlayed,
   gamesPlayed,
+  isPinned,
   color,
   onChange,
   onDelete,
+  onPinPlayer,
+  onUnPinPlayer,
 }) {
   const [value, setValue] = useState(name);
   const [isDeleting, setIsDeleting] = useBoolean(false);
@@ -44,6 +54,16 @@ function Player({
           <Text fontSize="xs">GP:&nbsp;{gamesPlayed}</Text>
         )}
 
+        <IconButton
+          variant="ghost"
+          size="sm"
+          fontSize="lg"
+          icon={isPinned ? <PinnedIcon /> : <UnpinnedIcon />}
+          color={isPinned ? 'gray.700' : 'gray.300'}
+          onClick={() =>
+            isPinned ? onUnPinPlayer(id) : onPinPlayer(id)
+          }
+        />
         {isDeleting ? (
           <>
             <Button
@@ -68,9 +88,10 @@ function Player({
             variant="ghost"
             size="sm"
             fontSize="lg"
+            color="gray.400"
             icon={<RemoveIcon />}
             onClick={setIsDeleting.on}
-          ></IconButton>
+          />
         )}
       </HStack>
     </Box>

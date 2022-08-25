@@ -8,8 +8,6 @@ function useStickyState(defaultValue, key, type) {
 
     const stickyValue = window?.localStorage.getItem(stateKey);
 
-    console.log({ stickyValue });
-
     if (stickyValue === null) return defaultValue;
     if (type === 'number') return parseInt(stickyValue, 10);
     return JSON.parse(stickyValue);

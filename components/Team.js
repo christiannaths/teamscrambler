@@ -9,6 +9,8 @@ function Team({
   color,
   onChangePlayerName,
   onDeletePlayer,
+  onPinPlayer,
+  onUnPinPlayer,
 }) {
   return (
     <Box mt={4}>
@@ -28,8 +30,11 @@ function Team({
           name={player.name}
           id={player.id}
           gamesPlayed={player.gp}
+          isPinned={Number.isFinite(player.pinned)}
           onChange={onChangePlayerName}
           onDelete={onDeletePlayer}
+          onPinPlayer={onPinPlayer}
+          onUnPinPlayer={onUnPinPlayer}
           color={color}
         />
       ))}

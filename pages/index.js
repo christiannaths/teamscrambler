@@ -45,12 +45,28 @@ export default function Home({
 
   const handleCreateGame = useCallback(
     (_, retries = 0) => {
-      const maxPlayers = teamCount * teamSize;
-      const shuffledPlayers = shuffle(players).sort(
-        (a, b) => a.gp - b.gp,
+      const pinnedPlayers = players.filter(p =>
+        Number.isFinite(p.pinned),
       );
 
-      const newHistory = shuffledPlayers.map(d => d.id);
+      const maxPlayers = teamCount * teamSize;
+      const shuffledPlayers = shuffle(players)
+        .sort((a, b) => a.gp - b.gp)
+        .filter(p => !Number.isFinite(p.pinned));
+
+      const mutableShuffledPlayers = shuffledPlayers.slice();
+
+      const replacedPinnedPlayers = new Array(players.length)
+        .fill()
+        .map((_, i) => {
+          const maybePinnedPlayer = pinnedPlayers.find(
+            p => p.pinned === i,
+          );
+          if (maybePinnedPlayer) return maybePinnedPlayer;
+          return mutableShuffledPlayers.shift();
+        });
+
+      const newHistory = replacedPinnedPlayers.map(d => d.id);
       const isRepeat = isEqual(newHistory, last(gameHistory));
 
       if (isRepeat && retries < 10) {
@@ -59,24 +75,30 @@ export default function Home({
 
       retries = 0;
 
-      const newGamePlayers = shuffledPlayers.map((player, i) => {
+      const newGamePlayers = replacedPinnedPlayers.map((player, i) => {
         return {
           ...player,
-          gp: i < maxPlayers ? player.gp + 1 : player.gp,
-          team: i < maxPlayers ? i % teamCount : undefined,
+          gp:
+            i < maxPlayers || Number.isFinite(player.pinned)
+              ? player.gp + 1
+              : player.gp,
         };
       });
 
       setPlayers(newGamePlayers);
       setGameHistory(d => [...d, newHistory]);
     },
-    [gameHistory, players, teamCount, teamSize],
+    [gameHistory, players, setPlayers, teamCount, teamSize],
   );
 
   const teams = useMemo(() => {
     if (!gameCount) return { undefined: players };
-    return groupBy(players, d => d.team);
-  }, [players, gameCount]);
+    return new Array(teamCount + 1).fill().map((_, i) => {
+      const start = i * teamSize;
+      const end = start + teamSize;
+      return players.slice(start, end);
+    });
+  }, [gameCount, players, teamCount, teamSize]);
 
   function handleChangePlayerCount(count) {
     const diff = count - players.length;
@@ -95,15 +117,35 @@ export default function Home({
     handleChangePlayerCount(players.length + 1);
   }
 
-  function handleChangePlayerName(playerId, value) {
-    setPlayers(state => {
-      state.find(d => d.id === playerId).name = value;
-      return state;
+  function handleChangePlayerName(playerId, name) {
+    const newPlayers = players.map(d => {
+      if (d.id !== playerId) return d;
+      return { ...d, name };
     });
+
+    setPlayers(newPlayers);
   }
 
   function handleDeletePlayer(playerId) {
     setPlayers(state => state.filter(d => d.id !== playerId));
+  }
+
+  function handlePinPlayer(playerId) {
+    const newPlayers = players.map((d, i) => {
+      if (d.id !== playerId) return d;
+      return { ...d, pinned: i };
+    });
+
+    setPlayers(newPlayers);
+  }
+
+  function handleUnPinPlayer(playerId) {
+    const newPlayers = players.map(d => {
+      if (d.id !== playerId) return d;
+      return { ...d, pinned: undefined };
+    });
+
+    setPlayers(newPlayers);
   }
 
   function handleReset() {
@@ -133,7 +175,7 @@ export default function Home({
         <VStack spacing={8} align="stretch">
           {Object.keys(teams).map(key => {
             const teamIndex = Number.parseInt(key, 10);
-            const isBench = !Number.isFinite(teamIndex);
+            const isBench = teamIndex >= teamCount;
             const name = isBench ? 'Bench' : `Team ${teamIndex + 1}`;
             const players = teams[key];
             const color = isBench ? 'gray.400' : teamColors[teamIndex];
@@ -145,6 +187,8 @@ export default function Home({
                 color={color}
                 onChangePlayerName={handleChangePlayerName}
                 onDeletePlayer={handleDeletePlayer}
+                onPinPlayer={handlePinPlayer}
+                onUnPinPlayer={handleUnPinPlayer}
               />
             );
           })}
